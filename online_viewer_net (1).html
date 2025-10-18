@@ -1,0 +1,749 @@
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{Avento Travel} • Geschäftsreisen</title>
+    <meta name="description" content="{{KURZBESCHREIBUNG}}">
+    <!-- Cookie Banner -->
+    <div id="cookie-banner" class="cookie-banner" hidden>
+        <div class="cookie-inner">
+            <div class="cookie-text">
+                Wir verwenden Cookies für anonyme Nutzungsstatistiken.  Sie können Ihre Wahl jederzeit ändern.
+            </div>
+            <div class="cookie-actions">
+                <button id="cookie-accept" class="btn alt" type="button">Akzeptieren</button>
+                <button id="cookie-decline" class="btn ghost" type="button">Nur technisch notwendig</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CONSENT_KEY = 'cookie-consent-v1';
+        const consent = getConsent();
+        setupConsentUI();
+        if (consent === 'accepted') {
+            enableAnalytics();
+        }
+
+        function setupConsentUI() {
+            const banner = document.getElementById('cookie-banner');
+            if (!consent) {
+                banner.hidden = false;
+            }
+            document.getElementById('cookie-accept').onclick = () => {
+                setConsent('accepted');
+                enableAnalytics();
+                hideBanner();
+            };
+            document.getElementById('cookie-decline').onclick = () => {
+                setConsent('declined');
+                hideBanner();
+            };
+        }
+
+        function hideBanner() {
+            document.getElementById('cookie-banner').hidden = true;
+        }
+
+        function setConsent(val) {
+            localStorage.setItem(CONSENT_KEY, val);
+            document.cookie = `consent=${val}; Max-Age=${60*60*24*180}; Path=/; SameSite=Lax`;
+        }
+
+        function getConsent() {
+            return localStorage.getItem(CONSENT_KEY);
+        }
+
+        function enableAnalytics() {
+            if (window.__ga_loaded) return;
+            window.__ga_loaded = true;
+            const MEASUREMENT_ID = 'G-XXXXXXXXXX'; // ersetzen
+            const s1 = document.createElement('script');
+            s1.async = true;
+            s1.src = `https://www.googletagmanager.com/gtag/js?id=${MEASUREMENT_ID}`;
+            document.head.appendChild(s1);
+            const s2 = document.createElement('script');
+            s2.innerHTML = `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config','${MEASUREMENT_ID}',{anonymize_ip:true});`;
+            document.head.appendChild(s2);
+        }
+    </script>
+
+    <style>
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #0b1220;
+            color: #fff;
+            z-index: 200;
+            box-shadow: 0 -8px 30px rgba(0, 0, 0, .2)
+        }
+
+        .cookie-inner {
+            max-width: 1152px;
+            margin: 0 auto;
+            padding: 16px 20px;
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            flex-wrap: wrap
+        }
+
+        .cookie-text {
+            flex: 1;
+            min-width: 260px;
+            color: #e5e7eb
+        }
+
+        .cookie-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        .cookie-actions .btn {
+            border-color: #fff
+        }
+
+        .cookie-actions .btn.ghost {
+            background: transparent;
+            color: #fff;
+            border-color: #94a3b8
+        }
+    </style>
+    <style>
+        :root {
+            --brand: #0f6;
+            /* TODO: Primärfarbe ändern */
+            --brand-dark: #0c4;
+            --ink: #0b1220;
+            --muted: #667085;
+            --bg: #ffffff;
+            --bg-alt: #f6f7f9;
+            --card: #ffffff;
+            --ring: rgba(16, 185, 129, .35);
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        img {
+            max-width: 100%;
+            display: block
+        }
+
+        .container {
+            max-width: 1152px;
+            margin-inline: auto;
+            padding: 0 20px
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 18px;
+            border-radius: 999px;
+            background: var(--ink);
+            color: #fff;
+            font-weight: 600;
+            border: 1px solid var(--ink);
+            transition: transform .06s ease, opacity .2s
+        }
+
+        .btn:hover {
+            transform: translateY(-1px)
+        }
+
+        .btn.alt {
+            background: var(--brand);
+            border-color: var(--brand);
+            color: #001
+        }
+
+        .btn.ghost {
+            background: transparent;
+            color: var(--ink);
+            border-color: #c9cfd8
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 80;
+            background: rgba(255, 255, 255, .8);
+            backdrop-filter: saturate(140%) blur(10px);
+            border-bottom: 1px solid #eef0f3
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            height: 64px
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800
+        }
+
+        .logo-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--brand)
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 16px;
+            align-items: center
+        }
+
+        .nav-links a {
+            padding: 8px 10px;
+            border-radius: 10px
+        }
+
+        .nav-links a:hover {
+            background: var(--bg-alt)
+        }
+
+        .hero {
+            padding: 72px 0 36px
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.1fr .9fr;
+            gap: 28px;
+            align-items: center
+        }
+
+        .eyebrow {
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            font-size: .85rem
+        }
+
+        h1 {
+            font-size: clamp(28px, 3.6vw, 44px);
+            line-height: 1.15;
+            margin: 10px 0 12px
+        }
+
+        .lead {
+            font-size: clamp(16px, 1.6vw, 19px);
+            color: #3b4754
+        }
+
+        .hero-card {
+            background: var(--card);
+            border: 1px solid #e7eaf0;
+            border-radius: var(--radius);
+            padding: 18px
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 16px
+        }
+
+        .stat {
+            background: var(--bg-alt);
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center
+        }
+
+        .stat b {
+            font-size: 20px;
+            display: block
+        }
+
+        .section {
+            padding: 52px 0
+        }
+
+        .section h2 {
+            font-size: clamp(22px, 2.6vw, 32px);
+            margin: 0 0 18px
+        }
+
+        .section p.section-lead {
+            color: #3b4754;
+            margin: 0 0 22px
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid #e7eaf0;
+            border-radius: var(--radius);
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+
+        .card small {
+            color: var(--muted)
+        }
+
+        .process {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            counter-reset: step
+        }
+
+        .step {
+            background: var(--bg-alt);
+            padding: 16px;
+            border-radius: 14px;
+            position: relative
+        }
+
+        .step:before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            inset: auto auto 100% 0;
+            background: var(--brand);
+            color: #001;
+            font-weight: 700;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px
+        }
+
+        label {
+            font-weight: 600
+        }
+
+        input,
+        select,
+        textarea {
+            padding: 12px;
+            border: 1px solid #d6dbe3;
+            border-radius: 12px;
+            background: #fff;
+            color: #0b1220;
+            outline: none
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 4px var(--ring)
+        }
+
+        textarea {
+            min-height: 120px;
+            grid-column: 1/-1
+        }
+
+        .form-row {
+            grid-column: 1/-1;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        .hint {
+            color: var(--muted);
+            font-size: .9rem
+        }
+
+        .cta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 16px
+        }
+
+        .badges {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px
+        }
+
+        .badge {
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-size: .9rem
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px
+        }
+
+        .footer {
+            padding: 40px 0;
+            border-top: 1px solid #eef0f3;
+            color: #3b4754
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 18px
+        }
+
+        .legal {
+            margin-top: 10px;
+            font-size: .9rem;
+            color: #667085
+        }
+
+        @media (max-width: 920px) {
+
+            .hero-grid,
+            .cards,
+            .process,
+            .grid-2,
+            .footer-grid {
+                grid-template-columns: 1fr
+            }
+
+            nav {
+                height: auto;
+                padding: 10px 0
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: flex-end
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <span class="logo-dot"></span>
+                    <span>Avento Travel</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#leistungen">Leistungen</a>
+                    <a href="#prozess">Ablauf</a>
+                    <a href="#buchung">Anfrage</a>
+                    <a href="#kontakt" class="btn ghost">Kontakt</a>
+                    <a href="#buchung" class="btn alt">Jetzt anfragen</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container hero-grid">
+                <div>
+                    <div class="eyebrow">Geschäftsreisen in Österreich</div>
+                    <h1>Kreative Ideen und Planung für Ihre Geschäftsreisen in Österreich</h1>
+                    <p class="lead"> Wir planen, optimieren und betreuen Ihre Reisen von A bis Z. Transparent und 24/7 erreichbar.</p>
+                    <div class="cta">
+                        <a href="#buchung" class="btn alt">Unverbindliche Anfrage</a>
+                        <a href="#leistungen" class="btn">Leistungen ansehen</a>
+                    </div>
+                    <div class="badges">
+                        <span class="badge">24/7 Support</span>
+                        <span class="badge">Reiserichtlinien-Compliance</span>
+                        <span class="badge">Kreative Ideen</span>
+                    </div>
+                </div>
+                <!-- Galerie/Slider entfernt -->
+                <div>
+                    <div class="hero-card">
+                        Unsere Qualitätsmerkmale
+                        </form>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat"><b>15%</b><small>durchschnittliche Einsparung</small></div>
+                        <div class="stat"><b>97%</b><small>Kundenzufriedenheit</small></div>
+                        <div class="stat"><b><span id="kpi"></span>min</b><small>Erstantwort</small></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="leistungen" class="section">
+            <div class="container">
+                <h2>Leistungen</h2>
+                <p class="section-lead">Module nach Bedarf wählen. Inhalte einfach austauschen.</p>
+                <div class="cards">
+                    <div class="card">
+                        <h3>Flug und Bahn</h3>
+                        <p>Egal von welchem Ort organisierbar</p>
+                        <small></small>
+                    </div>
+                    <div class="card">
+                        <h3>Hotel und Apartments</h3>
+                        <p>Tolle Unterkünfte, Nähe zu Standorten, Late Check-in.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Mietwagen und Transfers</h3>
+                        <p>transparente Versicherungen, E-Fahrzeug-Optionen.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Reiserichtlinien</h3>
+                        <p>Richtlinien-Erstellung, Freigabe-Workflows, Budgetkontrolle.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Reporting</h3>
+                        <p>Kostenstellen, CO₂-Auswertun als PDF.</p>
+                    </div>
+                    <div class="card">
+                        <h3>24/7 Support</h3>
+                        <p>Soforthilfe bei Ausfällen, Umbuchungen, Visa und Einreise.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="prozess" class="section">
+            <div class="container">
+                <h2>Ablauf</h2>
+                <div class="process">
+                    <div class="step"><b>Kick-off</b><br>Bedarfsanalyse, Ziele, Richtlinien.</div>
+                    <div class="step"><b>Setup</b><br>Account, Zahlungsarten, Genehmigungen.</div>
+                    <div class="step"><b>Buchung</b><br>Self-Service oder Concierge.</div>
+                    <div class="step"><b>Review</b><br>Monatliche Optimierung und Report.</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="buchung" class="section">
+            <div class="container grid-2">
+                <div>
+                    <h2>Anfrage stellen</h2>
+                    <p class="section-lead"></p>
+                    <form id="booking-form">
+                        <div class="field">
+                            <label for="bfirma">Firma</label>
+                            <input id="bfirma" name="bfirma" placeholder="{{Ihre Firma}}" required>
+                        </div>
+                        <div class="field">
+                            <label for="name">Ansprechpartner</label>
+                            <input id="name" name="name" placeholder="Vorname Nachname" required>
+                        </div>
+                        <div class="field">
+                            <label for="bmail">E-Mail</label>
+                            <input id="bmail" type="email" name="bmail" placeholder="you@company.com" required>
+                        </div>
+                        <div class="field">
+                            <label for="bphone">Telefon</label>
+                            <input id="bphone" name="bphone" placeholder="+43 ...">
+                        </div>
+                        <div class="field">
+                            <label for="ab">Abreise</label>
+                            <input id="ab" name="ab" placeholder="Wien">
+                        </div>
+                        <div class="field">
+                            <label for="ziel">Ziel</label>
+                            <input id="ziel" name="ziel" placeholder="Berlin">
+                        </div>
+                        <div class="field">
+                            <label for="von">Von</label>
+                            <input id="von" type="date" name="von">
+                        </div>
+                        <div class="field">
+                            <label for="bis">Bis</label>
+                            <input id="bis" type="date" name="bis">
+                        </div>
+                        <div class="field">
+                            <label for="personen">Reisende</label>
+                            <select id="personen" name="personen">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5+</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="budget">Budget pro Reise</label>
+                            <select id="budget" name="budget">
+                                <option>bis 300 €</option>
+                                <option>300–600 €</option>
+                                <option>600–1.200 €</option>
+                                <option>über 1.200 €</option>
+                            </select>
+                        </div>
+                        <div class="field" style="grid-column:1/-1">
+                            <label for="wuensche">Präferenzen</label>
+                            <textarea id="wuensche" name="wuensche" placeholder="z. B. Star Alliance, Fensterplatz, zentrales Hotel, Mietwagenklasse C"></textarea>
+                        </div>
+                        <div class="form-row">
+                            <label><input type="checkbox" id="consent"> Ich stimme der Verarbeitung meiner Daten zu</label>
+                        </div>
+                        <div class="form-row">
+                            <button class="btn alt" type="submit">Anfrage absenden</button>
+                            <button class="btn" type="button" id="copy-summary">Anfrage zusammenfassen</button>
+                            <button class="btn ghost" type="reset">Zurücksetzen</button>
+                        </div>
+                        <p class="hint">.</p>
+                    </form>
+                </div>
+                <div>
+                    <h2>Warum Avento travel</h2>
+                    <div class="card">
+                        <b>Schnelle Reaktionszeiten</b>
+                        <p>Antwort in unter 30 Minuten während der Geschäftszeiten. 24/7 Notfallnummer.</p>
+                    </div>
+                    <div class="card">
+                        <b>Kostentransparenz</b>
+                        <p>Keine versteckten Gebühren. Klare, vertraglich fixierte Servicegebühren.</p>
+                    </div>
+                    <div class="card">
+                        <b>Österreich Kenntnisse</b>
+                        <p>Mit meiner Erfharung in Österreich kann ich wertvolles Wissen über Orte und Aktivitäten an den Tag bringen.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="kontakt" class="section">
+            <div class="container footer-grid">
+                <div>
+                    <h2>Kontakt</h2>
+                    <p><b>Avento Travel</b><br>Hofstattweg 7<br>3550 Langenlois<br>Österreich</p>
+                    <p>Telefon +43 6641030855<br>E-Mail jonas.jahl06@gmail.com<br></p>
+                    <p class="hint"></p>
+                </div>
+                <div>
+                    <h3>Rechtliches</h3>
+                    <p><a href="{{IMPRESSUM-LINK}}">Impressum</a><br><a href="{{DATENSCHUTZ-LINK}}">Datenschutz</a><br><a href="{{AGB-LINK}}">AGB</a></p>
+                </div>
+                <div>
+                   
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div>© <span id="year"></span> Avento Travel</div>
+            <div class="legal">.</div>
+        </div>
+    </footer>
+
+    <script>
+        // TODO: Zieladresse für E-Mail-Weiterleitung setzen
+        const ACTION_MAIL = "jonas.jahl06@gmail.com"; // ändern
+
+        // UI Kleinigkeiten
+        document.getElementById('year').textContent = new Date().getFullYear();
+        document.getElementById('kpi').textContent = 30; // Minuten anpassen
+
+        // Quick form: nur Demo
+        document.getElementById('quick-form').addEventListener('submit', e => {
+            e.preventDefault();
+            alert('Danke. Wir melden uns zeitnah.');
+        });
+
+        // Booking form: Basis-Validierung und Mailto-Fallback
+        const bookingForm = document.getElementById('booking-form');
+        bookingForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const consent = document.getElementById('consent').checked;
+            if (!consent) {
+                alert('Bitte Zustimmung zur Datenverarbeitung erteilen.');
+                return;
+            }
+            const data = Object.fromEntries(new FormData(bookingForm).entries());
+            const summary = buildSummary(data);
+            // lokale Speicherung als Entwurf
+            localStorage.setItem('booking-draft', JSON.stringify(data));
+            // Mailto
+            const subject = encodeURIComponent('Neue Reiseanfrage von ' + (data.bfirma || 'Firma'));
+            const body = encodeURIComponent(summary);
+            window.location.href = `mailto:${ACTION_MAIL}?subject=${subject}&body=${body}`;
+        });
+
+        // Zusammenfassung kopieren
+        document.getElementById('copy-summary').addEventListener('click', () => {
+            const data = Object.fromEntries(new FormData(bookingForm).entries());
+            const txt = buildSummary(data);
+            navigator.clipboard.writeText(txt).then(() => alert('Zusammenfassung in Zwischenablage.'));
+        });
+
+        // Entwurf wiederherstellen
+        const draft = localStorage.getItem('booking-draft');
+        if (draft) {
+            try {
+                const d = JSON.parse(draft);
+                for (const k in d) {
+                    if (bookingForm.elements[k]) bookingForm.elements[k].value = d[k];
+                }
+            } catch {}
+        }
+
+        function buildSummary(d) {
+            return [
+                'Firma: ' + (d.bfirma || ''),
+                'Ansprechpartner: ' + (d.name || ''),
+                'E-Mail: ' + (d.bmail || ''),
+                'Telefon: ' + (d.bphone || ''),
+                'Abreise: ' + (d.ab || ''),
+                'Ziel: ' + (d.ziel || ''),
+                'Zeitraum: ' + (d.von || '') + ' bis ' + (d.bis || ''),
+                'Reisende: ' + (d.personen || ''),
+                'Budget: ' + (d.budget || ''),
+                'Präferenzen: ' + (d.wuensche || '')
+            ].join('\n');
+        }
+    </script>
+</body>
+</html>
